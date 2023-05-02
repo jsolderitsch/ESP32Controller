@@ -12,3 +12,7 @@ Some videos are available to show the controller assembly and the current progra
 [Serial-Echo Operation](https://www.youtube.com/watch?v=myja146RO-E)
 
 [Gesture Tester Operation](https://www.youtube.com/watch?v=loTJ5D5xJxg)
+
+[Tello InUrHand Part 1](https://www.youtube.com/watch?v=db--013AkHY)
+
+[Tello InUrHand Part 2](https://www.youtube.com/watch?v=0AQCgW6ffgo)
