@@ -1,6 +1,14 @@
 # ESP32Controller
 Source and support files for ESP32 Controller for Tello drone and Internet of Things experimentation
 
+Inspiration for code in this repository came from other code repositories on GitHub including:
+
+[ESP32 Tello CLI](https://github.com/touchgadget/ESPTelloCLI)
+
+and
+
+[Tello Control with MPU6060](https://github.com/mohammadreza-sharifi/Control-DJI-Tello-with-Arduino-and-MPU-6050)
+
 Initial configuration of this repo will be concentrated on Arduino sketch files that work with the ESP32 controller
 
 Some design information about the controller circuit and its composition will also be contained here.
