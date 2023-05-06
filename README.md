@@ -7,7 +7,7 @@ Inspiration for code in this repository came from other code repositories on Git
 
 and
 
-[Tello Control with MPU6060](https://github.com/mohammadreza-sharifi/Control-DJI-Tello-with-Arduino-and-MPU-6050)
+[Tello Control with MPU6050](https://github.com/mohammadreza-sharifi/Control-DJI-Tello-with-Arduino-and-MPU-6050)
 
 Initial configuration of this repo will be concentrated on Arduino sketch files that work with the ESP32 controller
 
