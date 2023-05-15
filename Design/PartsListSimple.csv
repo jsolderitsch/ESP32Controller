@@ -1,0 +1,11 @@
+﻿Item #,Designator,Qty,Description / Value
+1,BFLED1,1,Blue LED
+2,"BFR1, GBR1, GFR1, RBR1, RFR1, YBR1",6,330 Ohm resistor
+3,"CCW1, CW1, Down1, Kill1, Takeoff1, Up1",6,SW_Push_Button
+4,"CCWBR1, CWBR1, DBR1, KBR1, TBR1, UBR1",6,10K Ohm resistor
+5,ESP32,1,Adafruit_Feather_HUZZAH32_ESP32
+6,"GBLED1, GFLED1",2,Green LED
+7,MPU1,1,module_mpu6050
+8,OLED1,1,SSD1306 OLED
+9,"RBLED1, RFLED1",2,Red LED
+10,YBLED1,1,Yellow LED
