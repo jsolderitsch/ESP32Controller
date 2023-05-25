@@ -131,14 +131,6 @@ void loop() {
         led3State = true;
         digitalWrite(LED3_PIN, led3State);
 
-        // Duration: 255 is ~2 seconds
-        // force: intensity
-        // Some gamepads like DS3, DS4, DualSense, Switch, Xbox One S support
-        // rumble.
-        // It is possible to set it by calling:
-        // myGamepad->setRumble(0xc0 /* force */, 0xc0 /* duration */);
-      }
-
       if (myGamepad->y()) {
         Serial.println("Triangle button pressed");
         led3State = false;
