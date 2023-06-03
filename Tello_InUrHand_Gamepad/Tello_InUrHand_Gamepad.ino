@@ -639,26 +639,26 @@ void loop() {
 
     if (myGamepad->x()) {
       // Serial.println("Square button pressed");
-      vTaskDelay(250);
       onCCWButtonPressed();
+      vTaskDelay(200);
     }
 
     if (myGamepad->b()) {
       // Serial.println("Circle button pressed");
-      vTaskDelay(250);
       onCWButtonPressed();
+      vTaskDelay(200);
     }
 
     if (myGamepad->a()) {
       // Serial.println("Cross button pressed");
-      vTaskDelay(250);
       onDownButtonPressed();
+      vTaskDelay(200);
     }
 
     if (myGamepad->y()) {
       // Serial.println("Triangle button pressed");
-      vTaskDelay(250);
       onUpButtonPressed();
+      vTaskDelay(200);
     }
 
     if (myGamepad->l1()) {
