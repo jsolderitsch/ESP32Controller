@@ -2,6 +2,7 @@
  *  This sketch sends Tello commands over UDP from a ESP32 device
  *
  */
+#include <Bluepad32.h>
 #include "FS.h"
 #include "SPIFFS.h"
 #include <WiFi.h>
@@ -45,6 +46,7 @@ const int udpPort = 8889;
 
 MPU6050 mpu(Wire);
 Adafruit_SSD1306 display = Adafruit_SSD1306(128, 32, &Wire);
+GamepadPtr myGamepad;
 
 WiFiManager wm; // global wm instance
 
@@ -87,6 +89,39 @@ boolean battery_checked = false;
 
 int battery_check_tick = 0;
 uint8_t buffer[50];
+
+// This callback gets called any time a new gamepad is connected.
+// Up to 4 gamepads can be connected at the same time.
+void onConnectedGamepad(GamepadPtr gp) {
+  if (myGamepad == nullptr) {
+    Serial.printf("CALLBACK: Gamepad is now connected\n");
+    // Additionally, you can get certain gamepad properties like:
+    // Model, VID, PID, BTAddr, flags, etc.
+    GamepadProperties properties = gp->getProperties();
+    Serial.printf("Gamepad model: %s, VID=0x%04x, PID=0x%04x\n",
+                  gp->getModelName().c_str(), properties.vendor_id,
+                  properties.product_id);
+    myGamepad = gp;
+    display.clearDisplay();
+    display.setCursor(0, 0);
+    display.println(gp->getModelName().c_str());
+    display.println("connected");
+    display.display();
+  }
+}
+
+void onDisconnectedGamepad(GamepadPtr gp) {
+  if (myGamepad == gp) {
+    Serial.printf("CALLBACK: Gamepad is disconnected\n");
+    display.clearDisplay();
+    display.setCursor(0, 0);
+    display.println(gp->getModelName().c_str());
+    display.println("disconnected");
+    display.display();
+    myGamepad = nullptr;
+  }
+}
+
 
 //wifi event handler
 void WiFiEvent(WiFiEvent_t event){
@@ -250,14 +285,14 @@ void onResetWiFiButtonPressed()
 
 void onCWButtonPressed() {
   if (in_flight) {
-    Serial.println("CW button is pressed");
+    // Serial.println("CW button is pressed");
     processCommand("rc 0 0 0 50");
   }
 }
 
 void onCCWButtonPressed() {
   if (in_flight) {
-    Serial.println("CCW button is pressed");
+    // Serial.println("CCW button is pressed");
     processCommand("rc 0 0 0 -50");
   }
 }
@@ -265,14 +300,14 @@ void onCCWButtonPressed() {
 
 void onUpButtonPressed() {
   if (in_flight) {
-    Serial.println("UP button is pressed");
+    // Serial.println("UP button is pressed");
     processCommand("rc 0 0 30 0");
   }
 }
 
 void onDownButtonPressed() {
   if (in_flight) {
-    Serial.println("DOWN button is pressed");
+    //Serial.println("DOWN button is pressed");
     processCommand("rc 0 0 -30 0");
   }
 }
@@ -332,14 +367,22 @@ void onTakeoffButtonPressed() {
 }
 
 void setup(){
-  wm.setConfigPortalTimeout(45); // auto close configportal after 45 seconds
+  wm.setConfigPortalTimeout(75); // auto close configportal after 75 seconds
   
   // Initilize hardware serial:
   Serial.begin(115200);
   // Serial.setTimeout(0);
-  String manageTello = "ManageTello";
-  // manageTello = manageTello + "456";
+
+  Serial.printf("Firmware: %s\n", BP32.firmwareVersion());
+  const uint8_t *addr = BP32.localBdAddress();
+  Serial.printf("BD Addr: %2X:%2X:%2X:%2X:%2X:%2X\n", addr[0], addr[1], addr[2],
+                addr[3], addr[4], addr[5]);
+  String manageTello = "ManageTello" + String(addr[5]);
   Serial.println(manageTello);
+  // Setup the Bluepad32 callbacks
+  BP32.setup(&onConnectedGamepad, &onDisconnectedGamepad);
+  
+  // BP32.forgetBluetoothKeys();
 
   if(!SPIFFS.begin(FORMAT_SPIFFS_IF_FAILED)){
       Serial.println("SPIFFS Mount Failed");
@@ -455,6 +498,7 @@ void setup(){
 }
 
 void loop() {
+
   mpu.update();
   Roll = mpu.getAngleX();
   Pitch = mpu.getAngleY();
@@ -538,6 +582,93 @@ void loop() {
     }
   }
 
+  BP32.update();
+
+  if (myGamepad && myGamepad->isConnected()) {
+    // There are different ways to query whether a button is pressed.
+    // By query each button individually:
+    //  a(), b(), x(), y(), l1(), etc...
+
+    if (myGamepad->dpad() == 0x01) {
+      //Serial.println("go Forward");
+      pitchString = "30";
+      rollString = "0";
+    }
+
+    if (myGamepad->dpad() == 0x02) {
+      //Serial.println("go Back");
+      pitchString = "-30";
+      rollString = "0";
+    }
+
+    if (myGamepad->dpad() == 0x04) {
+      //Serial.println("go Right");
+      pitchString = "0";
+      rollString = "30";
+    }
+
+    if (myGamepad->dpad() == 0x05) {
+      //Serial.println("go Forward Right");
+      pitchString = "30";
+      rollString = "30";
+    }
+
+    if (myGamepad->dpad() == 0x06) {
+      //Serial.println("go Back Right");
+      pitchString = "-30";
+      rollString = "30";
+    }
+
+    if (myGamepad->dpad() == 0x08) {
+      //Serial.println("go Left");
+      pitchString = "0";
+      rollString = "-30";
+    }
+
+    if (myGamepad->dpad() == 0x09) {
+      //Serial.println("go Forward Left");
+      pitchString = "30";
+      rollString = "-30";
+    }
+
+    if (myGamepad->dpad() == 0x0a) {
+      //Serial.println("go Back Left");
+      pitchString = "-30";
+      rollString = "-30";
+    }
+
+    if (myGamepad->x()) {
+      // Serial.println("Square button pressed");
+      onCCWButtonPressed();
+    }
+
+    if (myGamepad->b()) {
+      // Serial.println("Circle button pressed");
+      onCWButtonPressed();
+    }
+
+    if (myGamepad->a()) {
+      // Serial.println("Cross button pressed");
+      onDownButtonPressed();
+    }
+
+    if (myGamepad->y()) {
+      // Serial.println("Triangle button pressed");
+      onUpButtonPressed();
+    }
+
+    if (myGamepad->l1()) {
+      // Serial.println("Left Shoulder button pressed");
+      onTakeoffButtonPressed();
+    }
+
+    if (myGamepad->r1()) {
+      // Serial.println("Right Shoulder button pressed");
+      onKillButtonPressed();
+    }
+
+  }
+
   lastGestureCmd = gestureCmd;
   gestureCmd = rcCmdBegin + rollString + " " + pitchString + rcCmdEnd;
   
@@ -595,7 +726,7 @@ void loop() {
     run_command("battery?",10);
     battery_check_tick = 0;
   }
-  //delay(500);  
+  //delay(500);
   vTaskDelay(1);  
 }
 
@@ -680,5 +811,5 @@ void run_command(String command, int udp_delay_ticks) {
     display.display();
     command_error = true;
   }
-  // delay(100);   
+//  delay(100);   
 }

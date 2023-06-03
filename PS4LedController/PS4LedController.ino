@@ -130,6 +130,7 @@ void loop() {
         Serial.println("Square button pressed");
         led3State = true;
         digitalWrite(LED3_PIN, led3State);
+      }
 
       if (myGamepad->y()) {
         Serial.println("Triangle button pressed");
