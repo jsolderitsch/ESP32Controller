@@ -121,19 +121,21 @@ void loop() {
       }
 
       if (myGamepad->b()) {
-        Serial.println("Circle button pressed");
+        // Serial.println("Circle button pressed");
+        // delay(250);
+        vTaskDelay(250);
         led2State = !led2State;
         digitalWrite(LED2_PIN, led2State);
       }
 
       if (myGamepad->x()) {
-        Serial.println("Square button pressed");
+        // Serial.println("Square button pressed");
         led3State = true;
         digitalWrite(LED3_PIN, led3State);
       }
 
       if (myGamepad->y()) {
-        Serial.println("Triangle button pressed");
+        // Serial.println("Triangle button pressed");
         led3State = false;
         digitalWrite(LED3_PIN, led3State);
       }
@@ -157,6 +159,6 @@ void loop() {
   // Detailed info here:
   // https://stackoverflow.com/questions/66278271/task-watchdog-got-triggered-the-tasks-did-not-reset-the-watchdog-in-time
 
-  // vTaskDelay(1);
-  delay(200);
+  vTaskDelay(1);
+  // delay(200);
 }
