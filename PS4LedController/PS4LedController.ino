@@ -4,11 +4,17 @@
 #define LED1_PIN 26
 #define LED2_PIN 25
 #define LED3_PIN 21
+#define LED4_PIN 27
+#define LED5_PIN 15
+#define LED6_PIN 4
 
 // Variables to hold LED states
 bool led1State = false;
 bool led2State = false;
 bool led3State = false;
+bool led4State = false;
+bool led5State = false;
+bool led6State = false;
 
 GamepadPtr myGamepads[BP32_MAX_GAMEPADS];
 
@@ -76,6 +82,9 @@ void setup() {
   pinMode(LED1_PIN, OUTPUT);
   pinMode(LED2_PIN, OUTPUT);
   pinMode(LED3_PIN, OUTPUT);
+  pinMode(LED4_PIN, OUTPUT);
+  pinMode(LED5_PIN, OUTPUT);
+  pinMode(LED6_PIN, OUTPUT);
 
   // Print to Serial Monitor
   Serial.println("Ready.");
@@ -100,30 +109,17 @@ void loop() {
       // By query each button individually:
       //  a(), b(), x(), y(), l1(), etc...
       if (myGamepad->a()) {
-        static int colorIdx = 0;
-        // Some gamepads like DS4 and DualSense support changing the color LED.
-        // It is possible to change it by calling:
-        switch (colorIdx % 3) {
-        case 0:
-          // Red
-          myGamepad->setColorLED(255, 0, 0);
-          break;
-        case 1:
-          // Green
-          myGamepad->setColorLED(0, 255, 0);
-          break;
-        case 2:
-          // Blue
-          myGamepad->setColorLED(0, 0, 255);
-          break;
-        }
-        colorIdx++;
+        // Serial.println("A button pressed");
+        // delay(250);
+        vTaskDelay(300);
+        led6State = !led6State;
+        digitalWrite(LED6_PIN, led6State);
       }
 
       if (myGamepad->b()) {
         // Serial.println("Circle button pressed");
         // delay(250);
-        vTaskDelay(250);
+        vTaskDelay(300);
         led2State = !led2State;
         digitalWrite(LED2_PIN, led2State);
       }
@@ -140,13 +136,27 @@ void loop() {
         digitalWrite(LED3_PIN, led3State);
       }
 
-      if (myGamepad->r2()) {
-        if (!led1State) Serial.println("Right Trigger held");
+      if (myGamepad->r1()) {
+        // Serial.println("Right button pressed");
+        vTaskDelay(300);
+        led4State = !led4State;
+        digitalWrite(LED4_PIN, led4State);
+      }
+
+      if (myGamepad->l1()) {
+        // Serial.println("Left button pressed");
+        vTaskDelay(300);
+        led5State = !led5State;
+        digitalWrite(LED5_PIN, led5State);
+      }
+
+      if (myGamepad->dpad() == 0x01) {
+        if (!led1State) Serial.println("DPAD up held");
         led1State = true;
         digitalWrite(LED1_PIN, led1State);
       }
-      if (!myGamepad->r2()) {
-        if (led1State) Serial.println("Right Trigger released");
+      if (myGamepad->dpad() == 0x00) {
+        if (led1State) Serial.println("DPAD released");
         led1State = false;
         digitalWrite(LED1_PIN, led1State);
       }
