@@ -55,11 +55,15 @@ EasyButton upButton(UP_PIN);
 EasyButton downButton(DOWN_PIN);
 EasyButton killButton(KILL_PIN);
 
-int Roll;
-int AbsRoll;
-int Pitch;
-int AbsPitch;
-int Yaw;
+int roll = 0;
+int mpuRoll = 0;
+int AbsRoll = 0;
+int pitch = 0;
+int mpuPitch = 0;
+int AbsPitch = 0;
+int mpuYaw = 0;
+int yaw = 0;
+int throttle = 0;
 
 String tello_ssid = "";
 String rcCmdBegin = "rc ";
@@ -456,12 +460,15 @@ void setup(){
 
 void loop() {
   mpu.update();
-  Roll = mpu.getAngleX();
-  Pitch = mpu.getAngleY();
-  Yaw = mpu.getAngleZ();
+  mpuRoll = mpu.getAngleX();
+  mpuPitch = mpu.getAngleY();
+  mpuYaw = mpu.getAngleZ();
 
-  AbsPitch = abs(Pitch);
-  AbsRoll = abs(Roll);
+  yaw = 0;
+  throttle = 0;
+
+  AbsPitch = abs(mpuPitch);
+  AbsRoll = abs(mpuRoll);
 
   takeoffButton.read();
   killButton.read();
@@ -471,76 +478,77 @@ void loop() {
   downButton.read();
   
   if (AbsRoll <= 10) {
-    rollString = "0";
+    roll = 0;
   }
   if (AbsPitch <= 15) {
-    pitchString = "0";
+    pitch = 0;
   }
 
-  if (Pitch < -16) {
+  if (mpuPitch < -15) {
     AbsPitch = constrain(AbsPitch, 20, 40);
     switch (AbsPitch) {
       case 20:
-        pitchString = "20";
+        pitch = 20;
         break;
       case 40:
-        pitchString = "40";
+        pitch = 40;
         break;
       default:
-        pitchString = "30";
+        pitch = 30;
         // pitchString = String(AbsPitch);
         break;          
     }
   }
-  if (Pitch > 16) {
+  if (mpuPitch > 15) {
     AbsPitch = constrain(AbsPitch, 20, 40);
     switch (AbsPitch) {
       case 20:
-        pitchString = "-20";
+        pitch = -20;
         break;
       case 40:
-        pitchString = "-40";
+        pitch = -40;
         break;
       default:
-        pitchString = "-30";
+        pitch = -30;
         // pitchString = "-" + AbsPitch;
         break;          
     }
    }
-  if (Roll < -11) {
+  if (mpuRoll < -10) {
     AbsRoll = constrain(AbsRoll, 20, 40);
     switch (AbsRoll) {
       case 20:
-        rollString = "20";
+        roll = 20;
         break;
       case 40:
-        rollString = "40";
+        roll = 40;
         break;
       default:
-        rollString = "30";
+        roll = 30;
         // rollString = String(AbsRoll);
         break;          
     }
   }
-  if (Roll > 11) {
+  if (mpuRoll > 10) {
     AbsRoll = constrain(AbsRoll, 20, 40);
     switch (AbsRoll) {
       case 20:
-        rollString = "-20";
+        roll = -20;
         break;
       case 40:
-        rollString = "-40";
+        roll = -40;
         break;
       default:
-        rollString = "-30";
+        roll = -30;
         // rollString = "-" + AbsRoll;
         break;          
     }
   }
 
   lastGestureCmd = gestureCmd;
-  gestureCmd = rcCmdBegin + rollString + " " + pitchString + rcCmdEnd;
-  
+//  gestureCmd = rcCmdBegin + rollString + " " + pitchString + rcCmdEnd;
+  gestureCmd = "rc ";
+  gestureCmd = gestureCmd + roll + " " + pitch + " " + throttle + " " + yaw;  
   if (command_error) {
     Serial.println("Command Error: Attempt to Land");
     run_command("land", 40);
