@@ -546,65 +546,70 @@ void loop() {
     }
 
     // Process Joystick values next
+/*
+    gpYaw = map(myGamepad->axisX(),-512,512,-100,100);
+    gpThrottle = map(myGamepad->axisY(),-512,512,100,-100);
+    gpRoll = map(myGamepad->axisRX(),-512,512,-100,100);
+    gpPitch = map(myGamepad->axisRY(),-512,512,100,-100);
+*/
+    gpYaw = map(myGamepad->axisX(),-512,512,-80,80);
+    gpThrottle = map(myGamepad->axisY(),-512,512,80,-80);
+    gpRoll = map(myGamepad->axisRX(),-512,512,-80,80);
+    gpPitch = map(myGamepad->axisRY(),-512,512,80,-80);
 
-    gpYaw = map(myGamepad->axisX(),-511,512,-100,100);
-    gpThrottle = map(myGamepad->axisY(),-511,512,100,-100);
-    gpRoll = map(myGamepad->axisRX(),-511,512,-100,100);
-    gpPitch = map(myGamepad->axisRY(),-511,512,100,-100);
-
-    if (abs(gpYaw) <= 10) {
+    if (abs(gpYaw) <= 15) {
       gpYaw = 0;
     }
-    if (abs(gpThrottle) <= 10) {
+    if (abs(gpThrottle) <= 15) {
       gpThrottle = 0;
     }
-    if (abs(gpPitch) <= 10) {
+    if (abs(gpPitch) <= 15) {
       gpPitch = 0;
     }
-    if (abs(gpRoll) <= 10) {
+    if (abs(gpRoll) <= 15) {
       gpRoll = 0;
     }
 
     // process dpad values last; they override joystick values
     if (myGamepad->dpad() == 0x01) {
       //Serial.println("go Forward");
-      gpPitch = 30;
+      gpPitch = 40;
       gpRoll = 0;
     }
     if (myGamepad->dpad() == 0x02) {
       //Serial.println("go Back");
-      gpPitch = -30;
+      gpPitch = -40;
       gpRoll = 0;
     }
     if (myGamepad->dpad() == 0x04) {
       //Serial.println("go Right");
       gpPitch = 0;
-      gpRoll = 30;
+      gpRoll = 40;
     }
     if (myGamepad->dpad() == 0x05) {
       //Serial.println("go Forward Right");
-      gpPitch = 30;
-      gpRoll = 30;
+      gpPitch = 40;
+      gpRoll = 40;
     }
     if (myGamepad->dpad() == 0x06) {
       //Serial.println("go Back Right");
-      gpPitch = -30;
-      gpRoll = 30;
+      gpPitch = -40;
+      gpRoll = 40;
     }
     if (myGamepad->dpad() == 0x08) {
       //Serial.println("go Left");
       gpPitch = 0;
-      gpRoll = -30;
+      gpRoll = -40;
     }
     if (myGamepad->dpad() == 0x09) {
       //Serial.println("go Forward Left");
-      gpPitch = 30;
-      gpRoll = -30;
+      gpPitch = 40;
+      gpRoll = -40;
     }
     if (myGamepad->dpad() == 0x0a) {
       //Serial.println("go Back Left");
-      gpPitch = -30;
-      gpRoll = -30;
+      gpPitch = -40;
+      gpRoll = -40;
     }
   }
 

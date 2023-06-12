@@ -76,7 +76,7 @@ void setup() {
   // Calling "forgetBluetoothKeys" in setup() just as an example.
   // Forgetting Bluetooth keys prevents "paired" gamepads to reconnect.
   // But might also fix some connection / re-connection issues.
-  // BP32.forgetBluetoothKeys();
+  BP32.forgetBluetoothKeys();
   // Set LED pins as outputs
 
   pinMode(LED1_PIN, OUTPUT);
