@@ -117,6 +117,10 @@ void onConnectedGamepad(GamepadPtr gp) {
 
 void onDisconnectedGamepad(GamepadPtr gp) {
   if (myGamepad == gp) {
+    if (in_flight) {
+      // Treat as emergency
+      onKillButtonPressed();
+    }
     Serial.printf("CALLBACK: Gamepad is disconnected\n");
     gpConnected = false;
     display.clearDisplay();
@@ -238,6 +242,12 @@ void onDownButtonPressed() {
 
 void onKillButtonPressed() {
   Serial.println("KILL button is pressed");
+  if (in_flight) {
+    run_command("emergency", 10);
+    battery_check_tick++;
+    digitalWrite(IN_FLIGHT, LOW);
+    in_flight = false;
+  }
   if (!connected) {
     Serial.println("Kill Button Pressed, no connection");
     Serial.println("Enabling OTA Update");
@@ -245,12 +255,6 @@ void onKillButtonPressed() {
     Serial.println("Clearing recent Tello SSID and restarting.");
     wm.resetSettings();
     ESP.restart();
-  }
-  if (in_flight) {
-    run_command("emergency", 10);
-    battery_check_tick++;
-    digitalWrite(IN_FLIGHT, LOW);
-    in_flight = false;
   }
 }
 
@@ -534,7 +538,8 @@ void loop() {
     if (myGamepad->y()) {
       // Serial.println("Triangle button pressed");
       onUpButtonPressed();
-      vTaskDelay(250);
+      // vTaskDelay(250);
+      delay(250);
     }
     if (myGamepad->l1()) {
       // Serial.println("Left Shoulder button pressed");
