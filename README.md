@@ -24,3 +24,9 @@ Some videos are available to show the controller assembly and the current progra
 [Tello InUrHand Part 1](https://www.youtube.com/watch?v=db--013AkHY)
 
 [Tello InUrHand Part 2](https://www.youtube.com/watch?v=0AQCgW6ffgo)
+
+Support is now available in a preliminary form for Gamepads. Dualshock PS3, Dualshock PS4, Switch Pro and more are supported.
+
+I want to thank Ricardo Quesada for his support as different controller types are being investigated.
+
+[Bluepad32](https://github.com/ricardoquesada/bluepad32)
