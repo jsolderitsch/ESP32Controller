@@ -74,6 +74,7 @@ unsigned long last_since_takeoff = 0;
 unsigned long this_since_takeoff = 0;
 unsigned long takeoff_time = 0;
 unsigned long commandDelay = 0;
+unsigned long batTimer = 0;
 
 //The udp library class
 WiFiUDP udp;
@@ -89,7 +90,6 @@ boolean battery_checked = false;
 boolean gestureDetected = false;  //gestures override gamepad joysticks
 boolean processGestures = true;  //allow for gamepad optimized flight
 
-int battery_check_tick = 0;
 uint8_t buffer[50];
 
 // This callback gets called any time a new gamepad is connected.
@@ -149,7 +149,6 @@ void WiFiEvent(WiFiEvent_t event) {
       connected = true;
       run_command("command", 20);
       run_command("battery?", 20);
-      battery_check_tick = 0;
       run_command("command", 20);
       display.clearDisplay();
       display.setCursor(0, 0);
@@ -160,6 +159,7 @@ void WiFiEvent(WiFiEvent_t event) {
       display.display();
       delay(2000);
       run_command("battery?", 20);
+      batTimer = millis();
       break;
     case SYSTEM_EVENT_STA_DISCONNECTED:
       Serial.println("WiFi lost connection");
@@ -191,14 +191,12 @@ void processCommand(String command) {
     lastCommand = command;
     in_rc_btn_motion = true;
   }
-  if (!gpConnected) battery_check_tick++;
 }
 
 void processSerialCommand(String command) {
   //  Serial.println(command);
   run_command(command, 20);
   lastCommand = command;
-  battery_check_tick++;
 }
 
 // Callbacks
@@ -251,7 +249,6 @@ void onKillButtonPressed() {
   Serial.println("KILL button is pressed");
   if (in_flight) {
     run_command("emergency", 10);
-    battery_check_tick++;
     digitalWrite(IN_FLIGHT, LOW);
     in_flight = false;
   }
@@ -288,12 +285,12 @@ void onTakeoffButtonPressed() {
   } else {
     processTakeoff();
   }
-  run_command("battery?", 10);
-  battery_check_tick = 0;
+  run_command("battery?", 20);
+  batTimer = millis();
 }
 
 void setup() {
-  wm.setConfigPortalTimeout(75);  // auto close configportal after 75 seconds
+  wm.setConfigPortalTimeout(45);  // auto close configportal after 45 seconds
 
   // Initilize hardware serial:
   Serial.begin(115200);
@@ -530,17 +527,17 @@ void loop() {
     if (myGamepad->x()) {
       // Serial.println("Square button pressed");
       onCCWButtonPressed();
-      vTaskDelay(250);
+      delay(250);
     }
     if (myGamepad->b()) {
       // Serial.println("Circle button pressed");
       onCWButtonPressed();
-      vTaskDelay(250);
+      delay(250);
     }
     if (myGamepad->a()) {
       // Serial.println("Cross button pressed");
       onDownButtonPressed();
-      vTaskDelay(250);
+      delay(250);
     }
     if (myGamepad->y()) {
       // Serial.println("Triangle button pressed");
@@ -639,7 +636,7 @@ void loop() {
     Serial.println("Command Error: Attempt to Land");
     run_command("land", 40);
     run_command("battery?", 30);
-    battery_check_tick = 0;
+    batTimer = millis();
     if (in_flight) {
       digitalWrite(IN_FLIGHT, LOW);
       in_flight = false;
@@ -690,12 +687,14 @@ void loop() {
       }
     }
   }
-  if ((battery_check_tick == BATTERY_CHECK_LIMIT) && !gpConnected) {
-    run_command("battery?", 10);
-    battery_check_tick = 0;
-  }
   //delay(500);
-  vTaskDelay(1);
+  if((millis()-batTimer)>60000 && !gpConnected) { // check battery every minute with no gamepad
+    run_command("battery?", 20);
+    batTimer = millis();
+  } else {
+    vTaskDelay(1);
+  }
+  // vTaskDelay(1);
 }
 
 void toggle_led(int ledToToggle) {
