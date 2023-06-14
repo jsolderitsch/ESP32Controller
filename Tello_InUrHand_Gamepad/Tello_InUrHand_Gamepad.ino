@@ -150,7 +150,7 @@ void WiFiEvent(WiFiEvent_t event) {
       run_command("command", 20);
       run_command("battery?", 20);
       battery_check_tick = 0;
-      run_command("command", 10);
+      run_command("command", 20);
       display.clearDisplay();
       display.setCursor(0, 0);
       display.println("Tello SSID:");
@@ -159,16 +159,23 @@ void WiFiEvent(WiFiEvent_t event) {
       display.println("Connected!");
       display.display();
       delay(2000);
-      run_command("battery?", 10);
+      run_command("battery?", 20);
       break;
     case SYSTEM_EVENT_STA_DISCONNECTED:
       Serial.println("WiFi lost connection");
+      connected = false;
       digitalWrite(LED_CONN_GREEN, LOW);
       digitalWrite(LED_CONN_RED, HIGH);
       digitalWrite(LED_BATT_YELLOW, HIGH);
       digitalWrite(LED_BATT_RED, LOW);
       digitalWrite(LED_BATT_GREEN, LOW);
-      connected = false;
+      display.clearDisplay();
+      display.setCursor(0, 0);
+      display.println("Tello SSID:");
+      display.println(tello_ssid);
+      display.println("");
+      display.println("Disonnected!");
+      display.display();
       break;
     default: break;
   }
@@ -660,7 +667,15 @@ void loop() {
         command.replace("connect", "");
         command.trim();
         strcpy(SSID, command.c_str());
+        display.clearDisplay();
+        display.setCursor(0, 0);
+        display.println("Connecting to: ");
+        display.println(command);
+        display.println("Restarting");
+        display.display();
+        delay(2000);
         WiFi.begin(SSID);
+        ESP.restart();
       } else if (command.startsWith("start")) {
         inSerialMotion = true;
         onTakeoffButtonPressed();
