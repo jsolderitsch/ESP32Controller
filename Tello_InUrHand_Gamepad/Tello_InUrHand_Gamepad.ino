@@ -688,7 +688,8 @@ void loop() {
     }
   }
   //delay(500);
-  if((millis()-batTimer)>60000 && !gpConnected) { // check battery every minute with no gamepad
+  if((millis()-batTimer)>60000 && !gpConnected && connected) { 
+    // check battery every minute with no gamepad
     run_command("battery?", 20);
     batTimer = millis();
   } else {
