@@ -20,7 +20,7 @@ Steelcase Nimbus gamepads are also very responsive when used to fly the Tello.
 
 ![PS3 XBox](images/PS3_Xbox.png)
 
-The clone pictured above (no button markings) was advertised online as a PS 3 clone. But when connected using the bluepad32 demo, it self-identifies as an XBox controller when paired with the Y plus PS3 button combination.
+The clone pictured above (no button markings) was advertised online as a PS 3 clone. But when connected using the bluepad32 demo, it self-identifies as an XBox controller when paired with the Y plus P3 button combination.
 
 In general, this and other PS 3 controller clones do **NOT** perform as well as the PS 4 or Nimbus when used with the ESP32 controller.
 
@@ -30,7 +30,7 @@ A pair of these controllers was bought on Amazon for less than $30.
 
 ![PS3 Clone](images/PS3_Clone.png)
 
-The PS3 clone pictured above does identify itself as DualShock PS 3. As such, it must be **MANUALLY PAIRED** to match the Bluetooth MAC address of the ESP32 that you want to connect it to. How to do this is documented in the Bluepad32 project pages.
+The PS 3 clone pictured above does identify itself as DualShock PS 3. As such, it must be **MANUALLY PAIRED** to match the Bluetooth MAC address of the ESP32 that you want to connect it to. How to do this is documented in the Bluepad32 project pages.
 
 ## GameSir T3s
 

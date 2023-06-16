@@ -27,6 +27,10 @@ Some videos are available to show the controller assembly and the current progra
 
 Support is now available in a preliminary form for Gamepads. Dualshock PS3, Dualshock PS4, Switch Pro and more are supported.
 
+Short video of the ESP32 and Gamepad in action is available at:
+
+[Tello With Gamepad](https://www.youtube.com/watch?v=6iQtT4HUG_U)
+
 I want to thank Ricardo Quesada for his support as different controller types are being investigated.
 
 [Bluepad32](https://gitlab.com/ricardoquesada/bluepad32)
