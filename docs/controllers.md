@@ -40,4 +40,4 @@ This T3s GameSir identifies itself as a Switch Pro controller when paired using 
 
 Switch Pro controllers have not been tested extensively with the ESP32 Controller. This T3s performs on par with the PS 3 clone controllers that have been tested.
 
-Note: The GameSir T1d that was featured as an approved Gamepad for use with the Tello and its Android and iOS apps is ***NOT*** supported by Bluepad32, the library used with the sketches included in this repository.
+***Note:*** The GameSir T1d that was featured as an approved Gamepad for use with the Tello and its Android and iOS apps is ***NOT*** supported by Bluepad32, the library used with the sketches included in this repository.

@@ -29,4 +29,4 @@ Support is now available in a preliminary form for Gamepads. Dualshock PS3, Dual
 
 I want to thank Ricardo Quesada for his support as different controller types are being investigated.
 
-[Bluepad32](https://github.com/ricardoquesada/bluepad32)
+[Bluepad32](https://gitlab.com/ricardoquesada/bluepad32)
