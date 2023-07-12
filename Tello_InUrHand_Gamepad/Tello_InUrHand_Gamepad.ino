@@ -305,7 +305,7 @@ void setup() {
   // Setup the Bluepad32 callbacks
   BP32.setup(&onConnectedGamepad, &onDisconnectedGamepad);
 
-  // BP32.forgetBluetoothKeys();
+  BP32.forgetBluetoothKeys();
 
   Wire.begin();
 

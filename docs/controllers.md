@@ -32,6 +32,12 @@ A pair of these gamepads was bought on Amazon for less than $30.
 
 The PS 3 clone pictured above does identify itself as DualShock PS 3. As such, it must be **MANUALLY PAIRED** to match the Bluetooth MAC address of the ESP32 that you want to connect it to. How to do this is documented in the Bluepad32 project pages.
 
+## 8bitDo Mini Gamepad
+
+![8BitDo Mini](images/8BitDo.png)
+
+8BitDo controllers are often recommended as Switch Controller devices. This mini version lacks joysticks but does have DPad support. You need to pair this as a "keyboard" when connecting to the ESP32. 
+
 ## GameSir T3s
 
 ![GameSir T3s](images/GameSir%20T3s.png)
