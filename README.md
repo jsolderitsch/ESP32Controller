@@ -34,3 +34,19 @@ Short video of the ESP32 and Gamepad in action is available at:
 I want to thank Ricardo Quesada for his support as different controller types are being investigated.
 
 [Bluepad32](https://gitlab.com/ricardoquesada/bluepad32)
+
+## Additions Fall 2024
+
+Two new folders have been added to support the use of the controller with the CrazyFie drone and the DroneBlocks Python Simulator.
+
+[CrazyFlie](https://www.bitcraze.io/portals/education/)
+
+[DroneBlocks Simulator](https://coding-sim.droneblocks.io/)
+
+Some videos showing these new developments can be seen at:
+
+[https://www.youtube.com/watch?v=WoIX1UGRwKo](https://www.youtube.com/watch?v=WoIX1UGRwKo)
+
+[https://www.youtube.com/watch?v=ems_P97hSn0](https://www.youtube.com/watch?v=ems_P97hSn0)
+
+[https://www.youtube.com/watch?v=1DGKaakXH4k](https://www.youtube.com/watch?v=1DGKaakXH4k)
