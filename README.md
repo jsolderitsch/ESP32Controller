@@ -33,7 +33,7 @@ Short video of the ESP32 and Gamepad in action is available at:
 
 I want to thank Ricardo Quesada for his support as different controller types are being investigated.
 
-[Bluepad32](https://gitlab.com/ricardoquesada/bluepad32)
+[Bluepad32](https://github.com/ricardoquesada/bluepad32)
 
 ## Additions Fall 2024
 
