@@ -166,15 +166,15 @@ void WiFiEvent(WiFiEvent_t event) {
       connected = false;
       digitalWrite(LED_CONN_GREEN, LOW);
       digitalWrite(LED_CONN_RED, HIGH);
-      digitalWrite(LED_BATT_YELLOW, HIGH);
+      digitalWrite(LED_BATT_YELLOW, LOW);
       digitalWrite(LED_BATT_RED, LOW);
       digitalWrite(LED_BATT_GREEN, LOW);
       display.clearDisplay();
       display.setCursor(0, 0);
-      display.println("Tello SSID:");
-      display.println(tello_ssid);
-      display.println("");
+      display.println("Last Tello");
+      display.println("Unavailable or");
       display.println("Disonnected!");
+      display.println("");
       display.display();
       break;
     default: break;
@@ -290,24 +290,6 @@ void onTakeoffButtonPressed() {
 }
 
 void setup() {
-  wm.setConfigPortalTimeout(45);  // auto close configportal after 45 seconds
-
-  // Initilize hardware serial:
-  Serial.begin(115200);
-  // Serial.setTimeout(0);
-
-  Serial.printf("Firmware: %s\n", BP32.firmwareVersion());
-  const uint8_t *addr = BP32.localBdAddress();
-  Serial.printf("BD Addr: %2X:%2X:%2X:%2X:%2X:%2X\n", addr[0], addr[1], addr[2],
-                addr[3], addr[4], addr[5]);
-  String manageTello = "ManageTello" + String(addr[5]);
-  Serial.println(manageTello);
-  // Setup the Bluepad32 callbacks
-  BP32.setup(&onConnectedGamepad, &onDisconnectedGamepad);
-
-  BP32.forgetBluetoothKeys();
-
-  Wire.begin();
 
   pinMode(LED_CONN_RED, OUTPUT);
   pinMode(LED_CONN_GREEN, OUTPUT);
@@ -323,6 +305,25 @@ void setup() {
   digitalWrite(LED_BATT_GREEN, LOW);
   digitalWrite(LED_BATT_YELLOW, LOW);
   digitalWrite(COMMAND_TICK, LOW);
+
+  wm.setConfigPortalTimeout(10);  // auto close configportal after 10 seconds, gamepad version
+
+  // Initilize hardware serial:
+  Serial.begin(115200);
+  // Serial.setTimeout(0);
+
+  Serial.printf("Firmware: %s\n", BP32.firmwareVersion());
+  const uint8_t *addr = BP32.localBdAddress();
+  Serial.printf("BD Addr: %2X:%2X:%2X:%2X:%2X:%2X\n", addr[0], addr[1], addr[2],
+                addr[3], addr[4], addr[5]);
+  String manageTello = "ManageTello" + String(addr[5]);
+  Serial.println(manageTello);
+  // Setup the Bluepad32 callbacks
+  BP32.setup(&onConnectedGamepad, &onDisconnectedGamepad);
+
+  // BP32.forgetBluetoothKeys();
+
+  Wire.begin();
 
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {  // Address 0x3C for 128x32
@@ -398,6 +399,7 @@ void setup() {
   res = wm.autoConnect(manageTello.c_str(), "telloadmin");  // password protected ap
   if (!res) {
     Serial.println("Failed to connect or hit timeout");
+    digitalWrite(LED_BATT_YELLOW, LOW);
     display.clearDisplay();
     display.setCursor(0, 0);
     display.println("Reset Controller");
@@ -555,17 +557,18 @@ void loop() {
     }
 
     // Process Joystick values next
-/*
-    gpYaw = map(myGamepad->axisX(),-512,512,-100,100);
-    gpThrottle = map(myGamepad->axisY(),-512,512,100,-100);
-    gpRoll = map(myGamepad->axisRX(),-512,512,-100,100);
-    gpPitch = map(myGamepad->axisRY(),-512,512,100,-100);
-*/
-    gpYaw = map(myGamepad->axisX(),-512,512,-80,80);
-    gpThrottle = map(myGamepad->axisY(),-512,512,80,-80);
-    gpRoll = map(myGamepad->axisRX(),-512,512,-80,80);
-    gpPitch = map(myGamepad->axisRY(),-512,512,80,-80);
 
+    gpYaw = map(myGamepad->axisX(),-512,511,-100,100);
+    gpThrottle = map(myGamepad->axisY(),-512,511,100,-100);
+    gpRoll = map(myGamepad->axisRX(),-512,511,-100,100);
+    gpPitch = map(myGamepad->axisRY(),-512,511,100,-100);
+
+/*
+    gpYaw = map(myGamepad->axisX(),-512,511,-80,80);
+    gpThrottle = map(myGamepad->axisY(),-511,512,80,-80);
+    gpRoll = map(myGamepad->axisRX(),-512,511,-80,80);
+    gpPitch = map(myGamepad->axisRY(),-512,511,80,-80);
+*/
     if (abs(gpYaw) <= 15) {
       gpYaw = 0;
     }
