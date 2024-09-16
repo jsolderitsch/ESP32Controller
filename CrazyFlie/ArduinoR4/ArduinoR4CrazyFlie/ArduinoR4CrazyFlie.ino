@@ -38,8 +38,9 @@ bool connected = false;
 const int pause_interval = 4000;
 
 //wifi network name from host WiFi
-const char* ssid = "Arlington";
-const char* password = "MontgomeryBurns!6002ear";
+const char* ssid = "YourNetwork";
+const char* password = "YourNetworkPassword";
+
 
 //udp port
 const int port = 8889;

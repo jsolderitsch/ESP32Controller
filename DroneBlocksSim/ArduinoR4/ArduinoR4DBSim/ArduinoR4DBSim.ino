@@ -1,8 +1,8 @@
 #include <WiFiS3.h>
 
 //ip address of host running python
-// #define ip_address "192.168.1.199"
-#define ip_address "192.168.1.14"
+#define ip_address "192.168.1.199"
+// #define ip_address "192.168.1.14"
 
 int status = WL_IDLE_STATUS;
 
@@ -40,10 +40,8 @@ char* drone_commands[15] = { "command", "takeoff", "land", "up 50", "cw 90", "fo
                              "flip b", "flip f", "flip l", "flip r", "up 50", "up 20", "down 50", "down 20" };
 
 //wifi network name from host WiFi
-// const char* ssid = "Arlington";
-// const char* password = "MontgomeryBurns!6002ear";
-const char* ssid = "LindaJoon";
-const char* password = "MontgomeryBurns!";
+const char* ssid = "YourNetwork";
+const char* password = "YourNetworkPassword";
 
 //udp port
 const int port = 8889;
