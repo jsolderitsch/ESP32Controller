@@ -49,6 +49,7 @@ def batt_led():
         if batt_yellow_exp: return 2
         elif (batt_state_ticks < batt_green_time) and (batt_green_exp == 0):
             batt_green_exp = 1
+            batt_state_ticks = 0
             return 1
         elif batt_state_ticks < batt_yellow_time: return 1
         else:
